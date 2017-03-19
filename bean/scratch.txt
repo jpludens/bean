@@ -1,0 +1,41 @@
+
+determining a single cost;
+    apply all non-quantum resources from pool to non-quantum resources from cost
+    apply quantum portions to each other
+
+
+
+**********************************************
+older stuff
+
+Make a list of every item that can be bought with the given pool
+Prepend each list with the list of items already bought
+
+
+
+
+
+
+
+class MultiCostCheck(object):
+    def __init__(self, pool, buyables, cap=None):
+        self.pool = pool
+        self.buyables = buyables
+
+        assert cap is None or cap < 100, "Purchase set size is capped at 100:"
+        self.cap = cap
+
+        checks = {b: SingleCostCheck(pool, b.cost) for b in buyables}
+
+        self.affordable_items = []
+        self.unaffordable_items = []
+
+        failed_checks = []
+        passed_checks = []
+        for buyable, check in checks.items():
+            if check.met:
+                passed_checks.append(check)
+                self.affordable_items.append(buyable)
+            else:
+                failed_checks.append(check)
+                self.unaffordable_items.append(buyable)
